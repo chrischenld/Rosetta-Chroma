@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"lib": ["es2017", "dom"],
+		"strict": true,
+		"typeRoots": ["./node_modules/@figma", "./node_modules/@types"],
+		"declaration": false,
+		"outDir": "./",
+		"moduleResolution": "node",
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"module": "esnext"
+	},
+	"include": ["code.ts"],
+	"exclude": ["node_modules", "backup-src"]
+}

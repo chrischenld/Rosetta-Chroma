@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Color Ramp Generator</title>
+		<style>
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+					sans-serif;
+				margin: 0;
+				padding: 16px;
+				color: #333;
+			}
+			.container {
+				display: flex;
+				flex-direction: column;
+				gap: 16px;
+			}
+			h2 {
+				margin: 0 0 8px 0;
+				font-size: 16px;
+				font-weight: 600;
+			}
+			p {
+				margin: 8px 0;
+				font-size: 14px;
+			}
+			.color-display {
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+				margin-bottom: 16px;
+			}
+			.color-preview {
+				width: 100%;
+				height: 100px;
+				border-radius: 6px;
+				border: 1px solid rgba(0, 0, 0, 0.1);
+			}
+			.color-info {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.color-hex {
+				font-family: monospace;
+				font-size: 14px;
+				padding: 4px 8px;
+				background-color: #f5f5f5;
+				border-radius: 4px;
+				border: 1px solid #ddd;
+			}
+			.button {
+				display: block;
+				padding: 10px 16px;
+				background-color: #18a0fb;
+				color: white;
+				border: none;
+				border-radius: 6px;
+				font-weight: 500;
+				cursor: pointer;
+				text-align: center;
+				transition: background-color 0.2s;
+			}
+			.button:hover {
+				background-color: #0d8ee0;
+			}
+			.button:active {
+				background-color: #0c84d0;
+			}
+			.button:disabled {
+				background-color: #cccccc;
+				cursor: not-allowed;
+			}
+			.message {
+				padding: 10px;
+				border-radius: 4px;
+				font-size: 14px;
+			}
+			.message.error {
+				background-color: #fff0f0;
+				color: #e53e3e;
+				border: 1px solid #feb2b2;
+			}
+			.message.success {
+				background-color: #f0fff4;
+				color: #38a169;
+				border: 1px solid #9ae6b4;
+			}
+			.message.info {
+				background-color: #ebf8ff;
+				color: #3182ce;
+				border: 1px solid #bee3f8;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div>
+				<h2>Selected Color</h2>
+				<div class="color-display">
+					<div id="color-preview" class="color-preview"></div>
+					<div class="color-info">
+						<span>Hex:</span>
+						<span id="color-hex" class="color-hex">#000000</span>
+					</div>
+				</div>
+			</div>
+
+			<div id="message-container" style="display: none" class="message"></div>
+
+			<button id="create-ramp-btn" class="button" disabled>
+				Create Color Ramp
+			</button>
+
+			<button
+				id="refresh-btn"
+				class="button"
+				style="margin-top: 8px; background-color: #e0e0e0; color: #333"
+			>
+				Refresh Selection
+			</button>
+		</div>
+
+		<script>
+			// Current color state
+			let currentColor = null;
+
+			// Elements
+			const colorPreview = document.getElementById("color-preview");
+			const colorHex = document.getElementById("color-hex");
+			const createRampBtn = document.getElementById("create-ramp-btn");
+			const refreshBtn = document.getElementById("refresh-btn");
+			const messageContainer = document.getElementById("message-container");
+
+			// Show message
+			function showMessage(message, type = "info") {
+				messageContainer.textContent = message;
+				messageContainer.className = `message ${type}`;
+				messageContainer.style.display = "block";
+
+				// Auto-hide success and info messages after 3 seconds
+				if (type === "success" || type === "info") {
+					setTimeout(() => {
+						messageContainer.style.display = "none";
+					}, 3000);
+				}
+			}
+
+			// Update UI with selected color
+			function updateSelectedColor(color) {
+				currentColor = color;
+				colorPreview.style.backgroundColor = color;
+				colorHex.textContent = color;
+				createRampBtn.disabled = false;
+			}
+
+			// Handle messages from the plugin
+			window.onmessage = (event) => {
+				const msg = event.data.pluginMessage;
+
+				if (msg.type === "selected-color") {
+					updateSelectedColor(msg.color);
+					messageContainer.style.display = "none";
+				} else if (msg.type === "no-selection" || msg.type === "no-fill") {
+					currentColor = null;
+					colorPreview.style.backgroundColor = "#EEEEEE";
+					colorHex.textContent = "None";
+					createRampBtn.disabled = true;
+					showMessage(msg.message, "info");
+				} else if (msg.type === "ramp-created") {
+					showMessage(msg.message, "success");
+				} else if (msg.type === "error") {
+					showMessage(msg.message, "error");
+				}
+			};
+
+			// Button event listeners
+			createRampBtn.addEventListener("click", () => {
+				if (currentColor) {
+					parent.postMessage(
+						{
+							pluginMessage: {
+								type: "create-ramp",
+								color: currentColor,
+							},
+						},
+						"*"
+					);
+				}
+			});
+
+			refreshBtn.addEventListener("click", () => {
+				parent.postMessage(
+					{
+						pluginMessage: {
+							type: "get-selected-color",
+						},
+					},
+					"*"
+				);
+			});
+		</script>
+	</body>
+</html>

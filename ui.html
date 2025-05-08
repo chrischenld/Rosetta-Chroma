@@ -5,10 +5,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Rosetta Chroma</title>
 		<style>
+			* {
+				box-sizing: border-box;
+			}
 			body {
 				font-family: ui-sans-serif, system-ui;
 				margin: 0;
-				padding: 12px;
+				padding: 4px 12px 12px 12px;
 				color: #121212;
 				font-size: 0.75rem;
 				background-color: #fff;
@@ -34,15 +37,16 @@
 			.color-display {
 				display: flex;
 				flex-direction: column;
-				gap: 8px;
+				gap: 4px;
 				margin-bottom: 8px;
 			}
 			.color-preview {
 				width: 100%;
-				height: 120px;
+				height: 80px;
 				border-radius: 2px;
 				border: 1px solid #ddd;
 				transition: all 0.3s ease;
+				margin-bottom: 8px;
 			}
 			.color-info {
 				display: flex;
@@ -54,10 +58,7 @@
 			.lch-value {
 				font-family: monospace;
 				font-size: 0.65rem;
-				padding: 4px 4px;
-				background-color: #f7f7f5;
-				border-radius: 1px;
-				border: 1px solid #ddd;
+				padding: 4px 0;
 				width: 64px;
 				text-align: right;
 			}
@@ -254,6 +255,111 @@
 				border-bottom: none;
 			}
 
+			.contrast-targets-container {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+			.contrast-target-row {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+			.contrast-input {
+				margin: 0;
+				width: 64px;
+				padding: 0 4px;
+				direction: rtl;
+			}
+
+			/* Slider container styles */
+			.slider-container {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				margin-top: 4px;
+			}
+
+			/* Slider styles */
+			.slider {
+				-webkit-appearance: none;
+				appearance: none;
+				width: 100%;
+				height: 4px;
+				border-radius: 2px;
+				background: #ddd;
+				outline: none;
+			}
+
+			.slider::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				appearance: none;
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				background: #000;
+				cursor: pointer;
+			}
+
+			.slider::-moz-range-thumb {
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				background: #000;
+				cursor: pointer;
+				border: none;
+			}
+
+			/* Curve controls layout */
+			.curve-controls {
+				border-top: 1px solid #eee;
+				padding-top: 12px;
+				margin-top: 8px;
+			}
+
+			/* Curve preview graph */
+			.curve-preview {
+				margin-top: 16px;
+				margin-bottom: 8px;
+				position: relative;
+			}
+
+			#curve-canvas {
+				width: 100%;
+				height: 80px;
+				background-color: #f7f7f5;
+				border: 1px solid #ddd;
+				border-radius: 2px;
+			}
+
+			.curve-labels {
+				display: flex;
+				justify-content: space-between;
+				font-size: 0.6rem;
+				color: #666;
+				margin-top: 2px;
+			}
+
+			.axis-label {
+				position: absolute;
+				font-size: 0.6rem;
+				color: #666;
+			}
+
+			.y-axis-label {
+				transform: rotate(-90deg);
+				transform-origin: top left;
+				left: -4px;
+				top: 40px;
+			}
+
+			.x-axis-label {
+				bottom: -16px;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+
 			/* Custom radio and checkbox styling */
 			input[type="radio"],
 			input[type="checkbox"] {
@@ -308,12 +414,43 @@
 				border-color: #666;
 			}
 			#org-nested,
-			#org-flat {
+			#org-flat,
+			#create-variables,
+			#create-styles,
+			#generation-mode-default,
+			#generation-mode-advanced {
 				margin: 0;
 			}
-			#create-variables,
-			#create-styles {
-				margin: 0;
+
+			/* Stop sliders styling */
+			.stops-container {
+				display: flex;
+				flex-direction: column;
+				gap: 6px;
+				margin-top: 8px;
+			}
+
+			.stop-row {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 8px;
+			}
+
+			.stop-row label {
+				width: 30px;
+				font-size: 0.65rem;
+			}
+
+			.stop-slider {
+				flex-grow: 1;
+			}
+
+			.stop-value {
+				font-family: monospace;
+				font-size: 0.65rem;
+				width: 36px;
+				text-align: right;
 			}
 		</style>
 	</head>
@@ -424,25 +561,373 @@
 								<span>Contrast</span>
 								<span id="contrast-value" class="contrast-value">21.0</span>
 							</div>
-
-							<div class="lch-container">
-								<div class="lch-row">
-									<span class="lch-label">Luminance</span>
-									<span id="lch-l" class="lch-value">0.00</span>
-								</div>
-								<div class="lch-row">
-									<span class="lch-label">Chroma</span>
-									<span id="lch-c" class="lch-value">0.00</span>
-								</div>
-								<div class="lch-row">
-									<span class="lch-label">Hue</span>
-									<span id="lch-h" class="lch-value">0</span>
-								</div>
+							<div class="lch-row">
+								<span class="lch-label">Luminance</span>
+								<span id="lch-l" class="lch-value">0.00</span>
+							</div>
+							<div class="lch-row">
+								<span class="lch-label">Chroma</span>
+								<span id="lch-c" class="lch-value">0.00</span>
+							</div>
+							<div class="lch-row">
+								<span class="lch-label">Hue</span>
+								<span id="lch-h" class="lch-value">0</span>
 							</div>
 						</div>
 					</div>
 
-					<div class="flavor-selector">
+					<!-- New section for generation mode toggle -->
+					<div class="section">
+						<h2>Generation Mode</h2>
+						<div class="radio-group">
+							<div class="radio-option">
+								<input
+									type="radio"
+									id="generation-mode-default"
+									name="generation-mode"
+									value="default"
+									checked
+								/>
+								<label for="generation-mode-default">Default</label>
+							</div>
+							<div class="radio-option">
+								<input
+									type="radio"
+									id="generation-mode-advanced"
+									name="generation-mode"
+									value="advanced"
+								/>
+								<label for="generation-mode-advanced">Advanced</label>
+							</div>
+						</div>
+
+						<!-- Advanced mode controls - initially hidden -->
+						<div
+							id="advanced-mode-controls"
+							style="display: none; margin-top: 12px"
+						>
+							<h2>WCAG Contrast Targets</h2>
+							<div class="flavor-description" style="margin-bottom: 8px">
+								Set custom contrast targets for each step of the color ramp
+							</div>
+
+							<div class="contrast-targets-container">
+								<div class="contrast-target-row">
+									<label for="contrast-100">100</label>
+									<input
+										type="number"
+										id="contrast-100"
+										class="input-field contrast-input"
+										value="12"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+								<div class="contrast-target-row">
+									<label for="contrast-200">200</label>
+									<input
+										type="number"
+										id="contrast-200"
+										class="input-field contrast-input"
+										value="8"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+								<div class="contrast-target-row">
+									<label for="contrast-300">300</label>
+									<input
+										type="number"
+										id="contrast-300"
+										class="input-field contrast-input"
+										value="5.5"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+								<div class="contrast-target-row">
+									<label for="contrast-400">400</label>
+									<input
+										type="number"
+										id="contrast-400"
+										class="input-field contrast-input"
+										value="4.5"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+								<div class="contrast-target-row">
+									<label for="contrast-500">500</label>
+									<input
+										type="number"
+										id="contrast-500"
+										class="input-field contrast-input"
+										value="3"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+								<div class="contrast-target-row">
+									<label for="contrast-600">600</label>
+									<input
+										type="number"
+										id="contrast-600"
+										class="input-field contrast-input"
+										value="2.5"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+								<div class="contrast-target-row">
+									<label for="contrast-700">700</label>
+									<input
+										type="number"
+										id="contrast-700"
+										class="input-field contrast-input"
+										value="1.4"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+								<div class="contrast-target-row">
+									<label for="contrast-800">800</label>
+									<input
+										type="number"
+										id="contrast-800"
+										class="input-field contrast-input"
+										value="1.2"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+								<div class="contrast-target-row">
+									<label for="contrast-900">900</label>
+									<input
+										type="number"
+										id="contrast-900"
+										class="input-field contrast-input"
+										value="1.1"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+								<div class="contrast-target-row">
+									<label for="contrast-950">950</label>
+									<input
+										type="number"
+										id="contrast-950"
+										class="input-field contrast-input"
+										value="1.05"
+										min="1"
+										max="21"
+										step="0.1"
+									/>
+								</div>
+							</div>
+
+							<h2 style="margin-top: 16px">Chroma Curve</h2>
+							<div class="flavor-description" style="margin-bottom: 8px">
+								Customize the chroma (saturation) curve shape
+							</div>
+
+							<div class="curve-controls">
+								<div>
+									<h2 style="margin-top: 16px; margin-bottom: 8px">
+										Custom Stop Values
+									</h2>
+									<div class="flavor-description" style="margin-bottom: 8px">
+										Drag sliders to adjust chroma value for each stop
+									</div>
+
+									<div class="stops-container">
+										<div class="stop-row">
+											<label for="stop-100">100</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-100"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="6"
+												/>
+												<span class="stop-value" id="stop-100-value">6%</span>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-200">200</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-200"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="40"
+												/>
+												<span class="stop-value" id="stop-200-value">40%</span>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-300">300</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-300"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="75"
+												/>
+												<span class="stop-value" id="stop-300-value">75%</span>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-400">400</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-400"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="100"
+												/>
+												<span class="stop-value" id="stop-400-value">100%</span>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-500">500</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-500"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="90"
+												/>
+												<span class="stop-value" id="stop-500-value">90%</span>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-600">600</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-600"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="75"
+												/>
+												<span class="stop-value" id="stop-600-value">75%</span>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-700">700</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-700"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="60"
+												/>
+												<span class="stop-value" id="stop-700-value">60%</span>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-800">800</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-800"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="40"
+												/>
+												<span class="stop-value" id="stop-800-value">40%</span>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-900">900</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-900"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="25"
+												/>
+												<span class="stop-value" id="stop-900-value">25%</span>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-950">950</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-950"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="15"
+												/>
+												<span class="stop-value" id="stop-950-value">15%</span>
+											</div>
+										</div>
+									</div>
+
+									<div style="margin-top: 12px">
+										<button id="reset-stops" class="button-tertiary">
+											Default
+										</button>
+										<button
+											id="reset-stone"
+											class="button-tertiary"
+											style="margin-left: 8px"
+										>
+											Stone
+										</button>
+										<button
+											id="reset-concrete"
+											class="button-tertiary"
+											style="margin-left: 8px"
+										>
+											Concrete
+										</button>
+									</div>
+								</div>
+							</div>
+
+							<!-- Add curve preview graph -->
+							<div class="curve-preview">
+								<div class="axis-label y-axis-label">Chroma</div>
+								<canvas id="curve-canvas"></canvas>
+								<div class="curve-labels">
+									<span>100</span>
+									<span>500</span>
+									<span>950</span>
+								</div>
+								<div class="axis-label x-axis-label">Color Steps</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="flavor-selector" id="flavor-controls">
 						<h2>Ramp Style</h2>
 						<select id="flavor-select">
 							<option value="bright">Bright</option>
@@ -533,11 +1018,40 @@
 		</div>
 
 		<script>
-			// Current color state
 			let currentColor = null;
 			let availableFlavors = [];
 			let selectedFlavor = "bright";
 			let isRampFrame = false;
+			let isAdvancedMode = false;
+			let customContrastTargets = {
+				100: 12,
+				200: 8,
+				300: 5.5,
+				400: 4.5,
+				500: 3,
+				600: 2.5,
+				700: 1.4,
+				800: 1.2,
+				900: 1.1,
+				950: 1.05,
+			};
+			let chromaCurveSettings = {
+				customStops: {
+					100: 0.06,
+					200: 0.4,
+					300: 0.75,
+					400: 1.0,
+					500: 0.9,
+					600: 0.75,
+					700: 0.6,
+					800: 0.4,
+					900: 0.25,
+					950: 0.15,
+				},
+			};
+
+			// Preset curves will be populated from the plugin
+			let presetCurves = {};
 
 			// Elements
 			const colorPreview = document.getElementById("color-preview");
@@ -547,6 +1061,7 @@
 			const lchC = document.getElementById("lch-c");
 			const lchH = document.getElementById("lch-h");
 			const flavorSelect = document.getElementById("flavor-select");
+			const flavorControls = document.getElementById("flavor-controls");
 			const flavorDescription = document.getElementById("flavor-description");
 			const createRampBtn = document.getElementById("create-ramp-btn");
 			const messageContainer = document.getElementById("message-container");
@@ -556,6 +1071,177 @@
 			const createStylesCheckbox = document.getElementById("create-styles");
 			const createVariablesCheckbox =
 				document.getElementById("create-variables");
+			const generationModeDefault = document.getElementById(
+				"generation-mode-default"
+			);
+			const generationModeAdvanced = document.getElementById(
+				"generation-mode-advanced"
+			);
+			const advancedModeControls = document.getElementById(
+				"advanced-mode-controls"
+			);
+			const contrastInputs = document.querySelectorAll(".contrast-input");
+			const resetStopsBtn = document.getElementById("reset-stops");
+			const stopSliders = document.querySelectorAll(".stop-slider");
+			const stopValues = document.querySelectorAll(".stop-value");
+			const curveCanvas = document.getElementById("curve-canvas");
+
+			// Canvas context for curve drawing
+			const curveCtx = curveCanvas ? curveCanvas.getContext("2d") : null;
+
+			// Function to draw the chroma curve
+			function drawChromaCurve() {
+				if (!curveCanvas || !curveCtx) return;
+
+				// Set canvas dimensions
+				const canvasWidth = curveCanvas.offsetWidth;
+				const canvasHeight = curveCanvas.offsetHeight;
+
+				// Handle high DPI displays
+				const dpr = window.devicePixelRatio || 1;
+				curveCanvas.width = canvasWidth * dpr;
+				curveCanvas.height = canvasHeight * dpr;
+				curveCtx.scale(dpr, dpr);
+
+				// Clear canvas
+				curveCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+				// Draw background grid
+				curveCtx.strokeStyle = "#ddd";
+				curveCtx.lineWidth = 0.5;
+
+				// Vertical grid lines
+				const steps = [
+					"100",
+					"200",
+					"300",
+					"400",
+					"500",
+					"600",
+					"700",
+					"800",
+					"900",
+					"950",
+				];
+				for (let i = 0; i < steps.length; i++) {
+					const x = (i / (steps.length - 1)) * canvasWidth;
+					curveCtx.beginPath();
+					curveCtx.moveTo(x, 0);
+					curveCtx.lineTo(x, canvasHeight);
+					curveCtx.stroke();
+				}
+
+				// Horizontal grid lines (4 divisions)
+				for (let i = 0; i <= 4; i++) {
+					const y = (i / 4) * canvasHeight;
+					curveCtx.beginPath();
+					curveCtx.moveTo(0, y);
+					curveCtx.lineTo(canvasWidth, y);
+					curveCtx.stroke();
+				}
+
+				// Draw the curve
+				curveCtx.strokeStyle = "#000";
+				curveCtx.lineWidth = 2;
+				curveCtx.beginPath();
+
+				steps.forEach((step, index) => {
+					const x = (index / (steps.length - 1)) * canvasWidth;
+					const y =
+						canvasHeight - chromaCurveSettings.customStops[step] * canvasHeight;
+
+					if (index === 0) {
+						curveCtx.moveTo(x, y);
+					} else {
+						curveCtx.lineTo(x, y);
+					}
+				});
+
+				curveCtx.stroke();
+			}
+
+			// Update the curve preview when settings change
+			function updateCurvePreview() {
+				drawChromaCurve();
+			}
+
+			// Initialize the curve preview
+			function initCurvePreview() {
+				if (curveCanvas) {
+					// Set initial size
+					curveCanvas.width = curveCanvas.offsetWidth;
+					curveCanvas.height = curveCanvas.offsetHeight;
+
+					// Draw initial curve
+					drawChromaCurve();
+				}
+			}
+
+			// Initialize the curve preview when the window loads
+			window.addEventListener("load", () => {
+				if (isAdvancedMode) {
+					initCurvePreview();
+				}
+			});
+
+			// Also update curve when window is resized
+			window.addEventListener("resize", () => {
+				if (isAdvancedMode) {
+					updateCurvePreview();
+				}
+			});
+
+			// Stop slider event listeners
+			stopSliders.forEach((slider) => {
+				slider.addEventListener("input", () => {
+					const step = slider.id.split("-")[1];
+					const value = parseInt(slider.value);
+					const valueElement = document.getElementById(`${slider.id}-value`);
+					valueElement.textContent = `${value}%`;
+					chromaCurveSettings.customStops[step] = value / 100;
+					updateCurvePreview();
+				});
+			});
+
+			// Reset stops button event listener
+			resetStopsBtn.addEventListener("click", () => {
+				applyPresetCurve("default");
+			});
+
+			// Stone curve reset button
+			document.getElementById("reset-stone").addEventListener("click", () => {
+				applyPresetCurve("stone");
+			});
+
+			// Concrete curve reset button
+			document
+				.getElementById("reset-concrete")
+				.addEventListener("click", () => {
+					applyPresetCurve("concrete");
+				});
+
+			// Function to apply a preset curve
+			function applyPresetCurve(presetName) {
+				const preset = presetCurves[presetName];
+				if (!preset) return;
+
+				// Update the chromaCurveSettings
+				chromaCurveSettings.customStops = { ...preset };
+
+				// Update all sliders and their values
+				stopSliders.forEach((slider) => {
+					const step = slider.id.split("-")[1];
+					const value = Math.round(preset[step] * 100);
+					slider.value = value;
+					const valueElement = document.getElementById(`${slider.id}-value`);
+					if (valueElement) {
+						valueElement.textContent = `${value}%`;
+					}
+				});
+
+				// Update the curve preview
+				updateCurvePreview();
+			}
 
 			// Tab elements
 			const tabs = document.querySelectorAll(".tab");
@@ -587,47 +1273,40 @@
 				});
 			});
 
-			// Populate flavor dropdown with available flavors
-			function populateFlavors(flavors) {
-				availableFlavors = flavors;
-				flavorSelect.innerHTML = "";
+			// Generation mode toggle handlers
+			generationModeDefault.addEventListener("change", () => {
+				if (generationModeDefault.checked) {
+					isAdvancedMode = false;
+					advancedModeControls.style.display = "none";
+					flavorControls.style.display = "block";
+				}
+			});
 
-				flavors.forEach((flavor) => {
-					const option = document.createElement("option");
-					option.value = flavor.id;
-					option.textContent = flavor.name;
-					flavorSelect.appendChild(option);
+			generationModeAdvanced.addEventListener("change", () => {
+				if (generationModeAdvanced.checked) {
+					isAdvancedMode = true;
+					advancedModeControls.style.display = "block";
+					flavorControls.style.display = "none";
+
+					// Initialize the curve preview when advanced mode is enabled
+					setTimeout(initCurvePreview, 10); // Small delay to ensure DOM is updated
+				}
+			});
+
+			// Contrast input handlers
+			contrastInputs.forEach((input) => {
+				input.addEventListener("change", () => {
+					const step = input.id.split("-")[1]; // Extract step number (100, 200, etc.)
+					const value = parseFloat(input.value);
+
+					// Validate input value (between 1 and 21)
+					if (value < 1) input.value = "1";
+					if (value > 21) input.value = "21";
+
+					// Update custom contrast targets
+					customContrastTargets[step] = parseFloat(input.value);
 				});
-
-				// Set initial selection
-				flavorSelect.value = "bright";
-				updateFlavorDescription();
-			}
-
-			// Update the flavor description when selection changes
-			function updateFlavorDescription() {
-				const selectedId = flavorSelect.value;
-				const selectedFlavor = availableFlavors.find(
-					(f) => f.id === selectedId
-				);
-				if (selectedFlavor) {
-					flavorDescription.textContent = selectedFlavor.description;
-				}
-			}
-
-			// Show message
-			function showMessage(message, type = "info") {
-				messageContainer.textContent = message;
-				messageContainer.className = `message ${type}`;
-				messageContainer.style.display = "block";
-
-				// Auto-hide success and info messages after 3 seconds
-				if (type === "success" || type === "info") {
-					setTimeout(() => {
-						messageContainer.style.display = "none";
-					}, 3000);
-				}
-			}
+			});
 
 			// Update UI with selected color
 			function updateSelectedColor(color, contrast, lch) {
@@ -649,7 +1328,27 @@
 			// Toggle the ramp frame UI
 			function toggleRampFrameUI(isRamp) {
 				isRampFrame = isRamp;
-				stylesSection.style.display = isRamp ? "block" : "none";
+				if (stylesSection) {
+					stylesSection.style.display = isRamp ? "block" : "none";
+				}
+			}
+
+			// Show message
+			function showMessage(message, type = "info") {
+				if (!messageContainer) return;
+
+				messageContainer.textContent = message;
+				messageContainer.className = `message ${type}`;
+				messageContainer.style.display = "block";
+
+				// Auto-hide success and info messages after 3 seconds
+				if (type === "success" || type === "info") {
+					setTimeout(() => {
+						if (messageContainer) {
+							messageContainer.style.display = "none";
+						}
+					}, 3000);
+				}
 			}
 
 			// Handle messages from the plugin
@@ -662,7 +1361,19 @@
 						populateFlavors(msg.flavors);
 					}
 					toggleRampFrameUI(msg.isRampFrame);
-					messageContainer.style.display = "none";
+					if (messageContainer) {
+						messageContainer.style.display = "none";
+					}
+				} else if (msg.type === "preset-curves") {
+					// Store the preset curves received from the plugin
+					presetCurves = msg.curves;
+
+					// Initialize the default curve settings
+					if (presetCurves.default) {
+						chromaCurveSettings.customStops = { ...presetCurves.default };
+						// Update sliders to match the default curve
+						applyPresetCurve("default");
+					}
 				} else if (msg.type === "no-selection" || msg.type === "no-fill") {
 					currentColor = null;
 					colorPreview.style.backgroundColor = "#EEEEEE";
@@ -797,6 +1508,15 @@
 								type: "create-ramp",
 								color: currentColor,
 								flavor: selectedFlavor,
+								isAdvancedMode: isAdvancedMode,
+								customContrastTargets: isAdvancedMode
+									? customContrastTargets
+									: null,
+								chromaCurveSettings: isAdvancedMode
+									? {
+											customStops: chromaCurveSettings.customStops,
+									  }
+									: null,
 							},
 						},
 						"*"
@@ -895,6 +1615,46 @@
 						pluginMessage: {
 							type: "replace-gray-variables",
 							newColorGroup: selectedGroup,
+						},
+					},
+					"*"
+				);
+			});
+
+			// Populate flavor dropdown with available flavors
+			function populateFlavors(flavors) {
+				availableFlavors = flavors;
+				flavorSelect.innerHTML = "";
+
+				flavors.forEach((flavor) => {
+					const option = document.createElement("option");
+					option.value = flavor.id;
+					option.textContent = flavor.name;
+					flavorSelect.appendChild(option);
+				});
+
+				// Set initial selection
+				flavorSelect.value = "bright";
+				updateFlavorDescription();
+			}
+
+			// Update the flavor description when selection changes
+			function updateFlavorDescription() {
+				const selectedId = flavorSelect.value;
+				const selectedFlavor = availableFlavors.find(
+					(f) => f.id === selectedId
+				);
+				if (selectedFlavor) {
+					flavorDescription.textContent = selectedFlavor.description;
+				}
+			}
+
+			// Request preset curves when the UI loads
+			window.addEventListener("load", () => {
+				parent.postMessage(
+					{
+						pluginMessage: {
+							type: "get-preset-curves",
 						},
 					},
 					"*"

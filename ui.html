@@ -9,7 +9,7 @@
 				box-sizing: border-box;
 			}
 			body {
-				font-family: ui-sans-serif, system-ui;
+				font-family: system-ui, ui-sans-serif;
 				margin: 0;
 				padding: 4px 12px 12px 12px;
 				color: #121212;
@@ -22,6 +22,7 @@
 				flex-direction: column;
 				gap: 12px;
 				padding-bottom: 16px;
+				margin-bottom: 16px;
 				height: 100%;
 			}
 
@@ -30,6 +31,13 @@
 				font-size: 0.75rem;
 				font-weight: 600;
 			}
+
+			h3 {
+				margin: 0;
+				font-size: 0.75rem;
+				font-weight: 600;
+			}
+
 			p {
 				margin: 8px 0;
 				font-size: 0.75px;
@@ -89,7 +97,7 @@
 				background-color: #f7f7f5;
 				margin: 0;
 				font-size: 0.75rem;
-				height: 36px;
+				height: 28px;
 				-webkit-appearance: none;
 				-moz-appearance: none;
 				appearance: none; /* Remove default appearance */
@@ -103,7 +111,8 @@
 			.input-field[type="select"]::-ms-expand {
 				display: none;
 			}
-			.flavor-description {
+
+			.input-description {
 				font-size: 0.65rem;
 				color: #666;
 				margin-top: 6px;
@@ -133,10 +142,11 @@
 				font-size: 0.75rem;
 			}
 			.button-tertiary {
+				font-size: 0.65rem;
 				padding: 0;
 				background-color: #fff;
 				height: 32px;
-				color: #000;
+				color: #999;
 				text-decoration: underline;
 				border: none;
 				cursor: pointer;
@@ -157,6 +167,18 @@
 			.button-tertiary:active {
 				color: #303030;
 			}
+
+			#create-ramp-btn {
+				margin-bottom: 16px;
+			}
+
+			.button-group {
+				display: flex;
+				flex-direction: row;
+				padding-top: 8px;
+				gap: 8px;
+			}
+
 			.message {
 				padding: 8px;
 				border-radius: 2px;
@@ -185,18 +207,24 @@
 				background-color: #f7f7f5;
 				margin-top: 4px;
 				font-size: 0.75rem;
-				height: 32px;
+				height: 28px;
 			}
 			.radio-group {
 				display: flex;
 				gap: 16px;
 				margin-top: 8px;
 			}
-			.radio-option {
+
+			.radio-option,
+			.checkbox-option {
 				display: flex;
 				align-items: center;
 				gap: 4px;
 			}
+			.checkbox-option label {
+				width: 100%;
+			}
+
 			.section {
 				border-bottom: 1px solid #eee;
 				padding-bottom: 12px;
@@ -255,22 +283,47 @@
 				border-bottom: none;
 			}
 
+			.advanced-mode-container {
+				display: flex;
+				flex-direction: column;
+			}
+
+			#advanced-mode-controls {
+				padding: 0px 0px 0px 12px;
+				border-left: 1px solid #eee;
+				display: none;
+				margin-top: 12px;
+			}
+
 			.contrast-targets-container {
 				display: flex;
 				flex-direction: column;
 				gap: 8px;
 			}
+
 			.contrast-target-row {
 				width: 100%;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
 			}
+
+			.contrast-target-row label {
+				font-size: 0.65rem;
+			}
+
 			.contrast-input {
 				margin: 0;
 				width: 64px;
 				padding: 0 4px;
-				direction: rtl;
+				text-align: right;
+				-moz-appearance: textfield; /* Hide spinners in Firefox */
+			}
+
+			.contrast-input::-webkit-outer-spin-button,
+			.contrast-input::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
 			}
 
 			/* Slider container styles */
@@ -278,18 +331,17 @@
 				display: flex;
 				align-items: center;
 				gap: 8px;
-				margin-top: 4px;
 			}
 
 			/* Slider styles */
 			.slider {
 				-webkit-appearance: none;
 				appearance: none;
-				width: 100%;
-				height: 4px;
+				height: 2px;
 				border-radius: 2px;
 				background: #ddd;
 				outline: none;
+				flex-grow: 1;
 			}
 
 			.slider::-webkit-slider-thumb {
@@ -297,7 +349,7 @@
 				appearance: none;
 				width: 12px;
 				height: 12px;
-				border-radius: 50%;
+				border-radius: 2px;
 				background: #000;
 				cursor: pointer;
 			}
@@ -311,17 +363,8 @@
 				border: none;
 			}
 
-			/* Curve controls layout */
-			.curve-controls {
-				border-top: 1px solid #eee;
-				padding-top: 12px;
-				margin-top: 8px;
-			}
-
 			/* Curve preview graph */
 			.curve-preview {
-				margin-top: 16px;
-				margin-bottom: 8px;
 				position: relative;
 			}
 
@@ -418,7 +461,8 @@
 			#create-variables,
 			#create-styles,
 			#generation-mode-default,
-			#generation-mode-advanced {
+			#generation-mode-advanced,
+			#advanced-mode-toggle {
 				margin: 0;
 			}
 
@@ -434,7 +478,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				gap: 8px;
+				gap: 16px;
 			}
 
 			.stop-row label {
@@ -442,15 +486,59 @@
 				font-size: 0.65rem;
 			}
 
-			.stop-slider {
-				flex-grow: 1;
+			.slider-container {
+				display: flex;
+				align-items: center;
+				width: 100%;
+				margin: 0;
+				justify-content: flex-end;
 			}
 
 			.stop-value {
-				font-family: monospace;
-				font-size: 0.65rem;
-				width: 36px;
+				width: 64px;
+				height: 28px;
+				padding: 0 8px;
+				border-radius: 1px;
+				border: 1px solid #ddd;
+				background-color: #f7f7f5;
+				font-size: 0.75rem;
 				text-align: right;
+				-moz-appearance: textfield; /* Hide spinners in Firefox */
+			}
+
+			/* Hide spinners in WebKit browsers */
+			.stop-value::-webkit-outer-spin-button,
+			.stop-value::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+
+			.luminance-controls,
+			.chroma-controls,
+			.hue-controls {
+				display: flex;
+				flex-direction: column;
+				padding-bottom: 12px;
+				margin-bottom: 12px;
+			}
+
+			.hue-controls {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+				padding-bottom: 0;
+				margin-bottom: 0;
+			}
+
+			.hue-controls label {
+				font-size: 0.75rem;
+				font-weight: 500;
+			}
+
+			.controls-description {
+				font-size: 0.65rem;
+				color: #666;
+				margin: 2px 0 0 0;
 			}
 		</style>
 	</head>
@@ -474,7 +562,7 @@
 					<!-- Styles section for ramp frames -->
 					<div id="styles-section" class="section ramp-section">
 						<h2>Create Color Styles</h2>
-						<div class="flavor-description" style="margin-bottom: 12px">
+						<div class="input-description" style="margin-bottom: 12px">
 							Create Figma color styles and variables from the current ramp
 							frame.
 						</div>
@@ -487,7 +575,7 @@
 								class="input-field"
 								placeholder="e.g., Blue, Red, Brand"
 							/>
-							<div class="flavor-description" style="margin-top: 4px">
+							<div class="input-description" style="margin-top: 4px">
 								This will be used to group variables in the "Colors" collection
 							</div>
 						</div>
@@ -550,7 +638,7 @@
 					</div>
 
 					<div>
-						<h2>Selected Color</h2>
+						<!-- <h2>Selected Color</h2> -->
 						<div class="color-display">
 							<div id="color-preview" class="color-preview"></div>
 							<div class="color-info">
@@ -576,353 +664,453 @@
 						</div>
 					</div>
 
-					<!-- New section for generation mode toggle -->
-					<div class="section">
-						<h2>Generation Mode</h2>
-						<div class="radio-group">
-							<div class="radio-option">
-								<input
-									type="radio"
-									id="generation-mode-default"
-									name="generation-mode"
-									value="default"
-									checked
-								/>
-								<label for="generation-mode-default">Default</label>
-							</div>
-							<div class="radio-option">
-								<input
-									type="radio"
-									id="generation-mode-advanced"
-									name="generation-mode"
-									value="advanced"
-								/>
-								<label for="generation-mode-advanced">Advanced</label>
-							</div>
+					<!-- New section for advanced mode toggle -->
+					<div class="advanced-mode-container">
+						<div class="checkbox-option">
+							<label for="advanced-mode-toggle">Advanced Mode</label>
+							<input
+								type="checkbox"
+								id="advanced-mode-toggle"
+								name="advanced-mode"
+							/>
 						</div>
 
 						<!-- Advanced mode controls - initially hidden -->
-						<div
-							id="advanced-mode-controls"
-							style="display: none; margin-top: 12px"
-						>
-							<h2>WCAG Contrast Targets</h2>
-							<div class="flavor-description" style="margin-bottom: 8px">
-								Set custom contrast targets for each step of the color ramp
+						<div id="advanced-mode-controls">
+							<div class="luminance-controls">
+								<h3>WCAG Contrast Targets</h3>
+								<p class="controls-description">
+									Mostly adjusts luminance. Set custom contrast targets for each
+									step of the color ramp
+								</p>
+
+								<div class="contrast-targets-container">
+									<div class="contrast-target-row">
+										<label for="contrast-100">100</label>
+										<input
+											type="number"
+											id="contrast-100"
+											class="input-field contrast-input"
+											value="12"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+									<div class="contrast-target-row">
+										<label for="contrast-200">200</label>
+										<input
+											type="number"
+											id="contrast-200"
+											class="input-field contrast-input"
+											value="8"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+									<div class="contrast-target-row">
+										<label for="contrast-300">300</label>
+										<input
+											type="number"
+											id="contrast-300"
+											class="input-field contrast-input"
+											value="5.5"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+									<div class="contrast-target-row">
+										<label for="contrast-400">400</label>
+										<input
+											type="number"
+											id="contrast-400"
+											class="input-field contrast-input"
+											value="4.5"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+									<div class="contrast-target-row">
+										<label for="contrast-500">500</label>
+										<input
+											type="number"
+											id="contrast-500"
+											class="input-field contrast-input"
+											value="3"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+									<div class="contrast-target-row">
+										<label for="contrast-600">600</label>
+										<input
+											type="number"
+											id="contrast-600"
+											class="input-field contrast-input"
+											value="2.5"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+									<div class="contrast-target-row">
+										<label for="contrast-700">700</label>
+										<input
+											type="number"
+											id="contrast-700"
+											class="input-field contrast-input"
+											value="1.4"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+									<div class="contrast-target-row">
+										<label for="contrast-800">800</label>
+										<input
+											type="number"
+											id="contrast-800"
+											class="input-field contrast-input"
+											value="1.2"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+									<div class="contrast-target-row">
+										<label for="contrast-900">900</label>
+										<input
+											type="number"
+											id="contrast-900"
+											class="input-field contrast-input"
+											value="1.1"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+									<div class="contrast-target-row">
+										<label for="contrast-950">950</label>
+										<input
+											type="number"
+											id="contrast-950"
+											class="input-field contrast-input"
+											value="1.05"
+											min="1"
+											max="21"
+											step="0.1"
+										/>
+									</div>
+								</div>
 							</div>
 
-							<div class="contrast-targets-container">
-								<div class="contrast-target-row">
-									<label for="contrast-100">100</label>
-									<input
-										type="number"
-										id="contrast-100"
-										class="input-field contrast-input"
-										value="12"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
+							<div class="chroma-controls">
+								<h3>Chroma Curve</h3>
+								<p class="controls-description">
+									Customize the chroma (saturation) curve shape. Drag sliders to
+									adjust chroma value for each stop.
+								</p>
+
+								<div class="curve-controls">
+									<div>
+										<div class="stops-container">
+											<div class="stop-row">
+												<label for="stop-100">100</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-100"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="6"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-100-value"
+														value="6"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+											<div class="stop-row">
+												<label for="stop-200">200</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-200"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="40"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-200-value"
+														value="40"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+											<div class="stop-row">
+												<label for="stop-300">300</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-300"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="75"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-300-value"
+														value="75"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+											<div class="stop-row">
+												<label for="stop-400">400</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-400"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="100"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-400-value"
+														value="100"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+											<div class="stop-row">
+												<label for="stop-500">500</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-500"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="90"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-500-value"
+														value="90"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+											<div class="stop-row">
+												<label for="stop-600">600</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-600"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="75"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-600-value"
+														value="75"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+											<div class="stop-row">
+												<label for="stop-700">700</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-700"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="60"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-700-value"
+														value="60"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+											<div class="stop-row">
+												<label for="stop-800">800</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-800"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="40"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-800-value"
+														value="40"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+											<div class="stop-row">
+												<label for="stop-900">900</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-900"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="25"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-900-value"
+														value="25"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+											<div class="stop-row">
+												<label for="stop-950">950</label>
+												<div class="slider-container">
+													<input
+														type="range"
+														id="stop-950"
+														class="slider stop-slider"
+														min="0"
+														max="100"
+														value="15"
+													/>
+													<input
+														type="number"
+														class="stop-value"
+														id="stop-950-value"
+														value="15"
+														min="0"
+														max="100"
+													/>
+												</div>
+											</div>
+										</div>
+
+										<div class="button-group">
+											<button id="reset-stops" class="button-tertiary">
+												Default
+											</button>
+											<button id="reset-stone" class="button-tertiary">
+												Stone
+											</button>
+											<button id="reset-concrete" class="button-tertiary">
+												Concrete
+											</button>
+										</div>
+									</div>
 								</div>
-								<div class="contrast-target-row">
-									<label for="contrast-200">200</label>
-									<input
-										type="number"
-										id="contrast-200"
-										class="input-field contrast-input"
-										value="8"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
-								</div>
-								<div class="contrast-target-row">
-									<label for="contrast-300">300</label>
-									<input
-										type="number"
-										id="contrast-300"
-										class="input-field contrast-input"
-										value="5.5"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
-								</div>
-								<div class="contrast-target-row">
-									<label for="contrast-400">400</label>
-									<input
-										type="number"
-										id="contrast-400"
-										class="input-field contrast-input"
-										value="4.5"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
-								</div>
-								<div class="contrast-target-row">
-									<label for="contrast-500">500</label>
-									<input
-										type="number"
-										id="contrast-500"
-										class="input-field contrast-input"
-										value="3"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
-								</div>
-								<div class="contrast-target-row">
-									<label for="contrast-600">600</label>
-									<input
-										type="number"
-										id="contrast-600"
-										class="input-field contrast-input"
-										value="2.5"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
-								</div>
-								<div class="contrast-target-row">
-									<label for="contrast-700">700</label>
-									<input
-										type="number"
-										id="contrast-700"
-										class="input-field contrast-input"
-										value="1.4"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
-								</div>
-								<div class="contrast-target-row">
-									<label for="contrast-800">800</label>
-									<input
-										type="number"
-										id="contrast-800"
-										class="input-field contrast-input"
-										value="1.2"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
-								</div>
-								<div class="contrast-target-row">
-									<label for="contrast-900">900</label>
-									<input
-										type="number"
-										id="contrast-900"
-										class="input-field contrast-input"
-										value="1.1"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
-								</div>
-								<div class="contrast-target-row">
-									<label for="contrast-950">950</label>
-									<input
-										type="number"
-										id="contrast-950"
-										class="input-field contrast-input"
-										value="1.05"
-										min="1"
-										max="21"
-										step="0.1"
-									/>
+
+								<!-- Add curve preview graph -->
+								<div class="curve-preview">
+									<div class="axis-label y-axis-label" style="display: none">
+										Chroma
+									</div>
+									<p class="controls-description">Chroma curve</p>
+									<canvas id="curve-canvas"></canvas>
+									<div class="curve-labels">
+										<span>100</span>
+										<span>500</span>
+										<span>950</span>
+									</div>
+									<div class="axis-label x-axis-label" style="display: none">
+										Color Steps
+									</div>
 								</div>
 							</div>
 
-							<h2 style="margin-top: 16px">Chroma Curve</h2>
-							<div class="flavor-description" style="margin-bottom: 8px">
-								Customize the chroma (saturation) curve shape
-							</div>
-
-							<div class="curve-controls">
+							<div class="hue-controls">
 								<div>
-									<h2 style="margin-top: 16px; margin-bottom: 8px">
-										Custom Stop Values
-									</h2>
-									<div class="flavor-description" style="margin-bottom: 8px">
-										Drag sliders to adjust chroma value for each stop
+									<h3>Hue Adjustments</h3>
+									<p class="controls-description">
+										Customize how hue shifts across the color ramp
+									</p>
+								</div>
+								<div>
+									<label for="hue-curve-value">Hue adjustment</label>
+									<div
+										class="slider-container"
+										style="margin-top: 8px; display: flex; align-items: center"
+									>
+										<input
+											type="range"
+											id="hue-curve-value"
+											class="slider"
+											min="-250"
+											max="250"
+											value="0"
+										/>
+										<input
+											type="number"
+											class="stop-value"
+											id="hue-curve-display"
+											value="0"
+											min="-250"
+											max="250"
+										/>
 									</div>
-
-									<div class="stops-container">
-										<div class="stop-row">
-											<label for="stop-100">100</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-100"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="6"
-												/>
-												<span class="stop-value" id="stop-100-value">6%</span>
-											</div>
-										</div>
-										<div class="stop-row">
-											<label for="stop-200">200</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-200"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="40"
-												/>
-												<span class="stop-value" id="stop-200-value">40%</span>
-											</div>
-										</div>
-										<div class="stop-row">
-											<label for="stop-300">300</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-300"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="75"
-												/>
-												<span class="stop-value" id="stop-300-value">75%</span>
-											</div>
-										</div>
-										<div class="stop-row">
-											<label for="stop-400">400</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-400"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="100"
-												/>
-												<span class="stop-value" id="stop-400-value">100%</span>
-											</div>
-										</div>
-										<div class="stop-row">
-											<label for="stop-500">500</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-500"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="90"
-												/>
-												<span class="stop-value" id="stop-500-value">90%</span>
-											</div>
-										</div>
-										<div class="stop-row">
-											<label for="stop-600">600</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-600"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="75"
-												/>
-												<span class="stop-value" id="stop-600-value">75%</span>
-											</div>
-										</div>
-										<div class="stop-row">
-											<label for="stop-700">700</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-700"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="60"
-												/>
-												<span class="stop-value" id="stop-700-value">60%</span>
-											</div>
-										</div>
-										<div class="stop-row">
-											<label for="stop-800">800</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-800"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="40"
-												/>
-												<span class="stop-value" id="stop-800-value">40%</span>
-											</div>
-										</div>
-										<div class="stop-row">
-											<label for="stop-900">900</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-900"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="25"
-												/>
-												<span class="stop-value" id="stop-900-value">25%</span>
-											</div>
-										</div>
-										<div class="stop-row">
-											<label for="stop-950">950</label>
-											<div class="slider-container">
-												<input
-													type="range"
-													id="stop-950"
-													class="slider stop-slider"
-													min="0"
-													max="100"
-													value="15"
-												/>
-												<span class="stop-value" id="stop-950-value">15%</span>
-											</div>
-										</div>
-									</div>
-
-									<div style="margin-top: 12px">
-										<button id="reset-stops" class="button-tertiary">
-											Default
-										</button>
-										<button
-											id="reset-stone"
-											class="button-tertiary"
-											style="margin-left: 8px"
-										>
-											Stone
-										</button>
-										<button
-											id="reset-concrete"
-											class="button-tertiary"
-											style="margin-left: 8px"
-										>
-											Concrete
-										</button>
+									<div class="input-description" style="margin-top: 4px">
+										Adjusts how much the hue changes from steps 100 to 950
 									</div>
 								</div>
-							</div>
-
-							<!-- Add curve preview graph -->
-							<div class="curve-preview">
-								<div class="axis-label y-axis-label">Chroma</div>
-								<canvas id="curve-canvas"></canvas>
-								<div class="curve-labels">
-									<span>100</span>
-									<span>500</span>
-									<span>950</span>
+								<div>
+									<label for="hue-curve-rate">Curve Rate</label>
+									<select
+										id="hue-curve-rate"
+										class="input-field"
+										style="margin-top: 8px"
+									>
+										<option value="early">Early (Front-loaded)</option>
+										<option value="linear">Linear (Even)</option>
+										<option value="late" selected>Late (Back-loaded)</option>
+									</select>
+									<div class="input-description" style="margin-top: 4px">
+										Determines where in the ramp the hue changes most rapidly
+									</div>
 								</div>
-								<div class="axis-label x-axis-label">Color Steps</div>
 							</div>
 						</div>
 					</div>
@@ -933,7 +1121,7 @@
 							<option value="bright">Bright</option>
 							<!-- More options will be added dynamically -->
 						</select>
-						<div id="flavor-description" class="flavor-description">
+						<div id="input-description" class="input-description">
 							Vibrant colors with high saturation, ideal for modern UIs
 						</div>
 					</div>
@@ -942,7 +1130,7 @@
 						Create Color Ramp
 					</button>
 
-					<div class="info-section">
+					<div class="info-section" id="info-section">
 						<div class="info-title">What is this?</div>
 						<div class="info-content">
 							This generates 10 colors (100-950) with specific contrast ratios
@@ -956,7 +1144,7 @@
 				<div id="application-tab" class="tab-content">
 					<div class="section">
 						<h2>Variable Detection</h2>
-						<div class="flavor-description" style="margin-bottom: 12px">
+						<div class="input-description" style="margin-bottom: 12px">
 							Detect variables used in the selected layers
 						</div>
 
@@ -975,7 +1163,7 @@
 
 					<div class="section">
 						<h2>Replace Gray Variables</h2>
-						<div class="flavor-description" style="margin-bottom: 12px">
+						<div class="input-description" style="margin-bottom: 12px">
 							Replace Gray/100-950 variables with variables from another color
 							group
 						</div>
@@ -1049,6 +1237,10 @@
 					950: 0.15,
 				},
 			};
+			let hueCurveSettings = {
+				totalHueCurve: 0,
+				curveRate: "late",
+			};
 
 			// Preset curves will be populated from the plugin
 			let presetCurves = {};
@@ -1062,20 +1254,18 @@
 			const lchH = document.getElementById("lch-h");
 			const flavorSelect = document.getElementById("flavor-select");
 			const flavorControls = document.getElementById("flavor-controls");
-			const flavorDescription = document.getElementById("flavor-description");
+			const flavorDescription = document.getElementById("input-description");
 			const createRampBtn = document.getElementById("create-ramp-btn");
 			const messageContainer = document.getElementById("message-container");
+			const infoSection = document.getElementById("info-section");
 			const stylesSection = document.getElementById("styles-section");
 			const styleNameInput = document.getElementById("style-name");
 			const createStylesBtn = document.getElementById("create-styles-btn");
 			const createStylesCheckbox = document.getElementById("create-styles");
 			const createVariablesCheckbox =
 				document.getElementById("create-variables");
-			const generationModeDefault = document.getElementById(
-				"generation-mode-default"
-			);
-			const generationModeAdvanced = document.getElementById(
-				"generation-mode-advanced"
+			const advancedModeToggle = document.getElementById(
+				"advanced-mode-toggle"
 			);
 			const advancedModeControls = document.getElementById(
 				"advanced-mode-controls"
@@ -1085,9 +1275,13 @@
 			const stopSliders = document.querySelectorAll(".stop-slider");
 			const stopValues = document.querySelectorAll(".stop-value");
 			const curveCanvas = document.getElementById("curve-canvas");
+			const hueCurveSlider = document.getElementById("hue-curve-value");
+			const hueCurveDisplay = document.getElementById("hue-curve-display");
+			const hueCurveRate = document.getElementById("hue-curve-rate");
 
 			// Canvas context for curve drawing
 			const curveCtx = curveCanvas ? curveCanvas.getContext("2d") : null;
+			const stopInputs = document.querySelectorAll(".stop-value");
 
 			// Function to draw the chroma curve
 			function drawChromaCurve() {
@@ -1141,8 +1335,8 @@
 				}
 
 				// Draw the curve
-				curveCtx.strokeStyle = "#000";
-				curveCtx.lineWidth = 2;
+				curveCtx.strokeStyle = "#444";
+				curveCtx.lineWidth = 1;
 				curveCtx.beginPath();
 
 				steps.forEach((step, index) => {
@@ -1177,14 +1371,19 @@
 				}
 			}
 
-			// Initialize the curve preview when the window loads
-			window.addEventListener("load", () => {
-				if (isAdvancedMode) {
+			// Initialize based on current state
+			setTimeout(() => {
+				// Initialize curve preview if advanced mode is active on load
+				if (advancedModeToggle.checked) {
+					isAdvancedMode = true;
+					advancedModeControls.style.display = "block";
+					flavorControls.style.display = "none";
+					infoSection.style.display = "none";
 					initCurvePreview();
 				}
-			});
+			}, 100);
 
-			// Also update curve when window is resized
+			// Update curve when window is resized
 			window.addEventListener("resize", () => {
 				if (isAdvancedMode) {
 					updateCurvePreview();
@@ -1197,8 +1396,31 @@
 					const step = slider.id.split("-")[1];
 					const value = parseInt(slider.value);
 					const valueElement = document.getElementById(`${slider.id}-value`);
-					valueElement.textContent = `${value}%`;
+					valueElement.value = value;
 					chromaCurveSettings.customStops[step] = value / 100;
+					updateCurvePreview();
+				});
+			});
+
+			// Stop input event listeners for number inputs
+			stopInputs.forEach((input) => {
+				input.addEventListener("input", () => {
+					const id = input.id.split("-value")[0]; // Convert "stop-100-value" to "stop-100"
+					const step = id.split("-")[1]; // Extract "100"
+					const slider = document.getElementById(id);
+					let value = parseInt(input.value);
+
+					// Clamp value between min and max
+					if (value < 0) value = 0;
+					if (value > 100) value = 100;
+
+					// Update slider position
+					slider.value = value;
+
+					// Update curve settings
+					chromaCurveSettings.customStops[step] = value / 100;
+
+					// Update preview
 					updateCurvePreview();
 				});
 			});
@@ -1220,6 +1442,33 @@
 					applyPresetCurve("concrete");
 				});
 
+			// Hue curve value slider listener
+			hueCurveSlider.addEventListener("input", () => {
+				const value = parseInt(hueCurveSlider.value);
+				hueCurveDisplay.value = value;
+				hueCurveSettings.totalHueCurve = value;
+			});
+
+			// Hue curve input listener
+			hueCurveDisplay.addEventListener("input", () => {
+				let value = parseInt(hueCurveDisplay.value);
+
+				// Clamp value between min and max
+				if (value < -10) value = -10;
+				if (value > 10) value = 10;
+
+				// Update slider position
+				hueCurveSlider.value = value;
+
+				// Update settings
+				hueCurveSettings.totalHueCurve = value;
+			});
+
+			// Hue curve rate dropdown listener
+			hueCurveRate.addEventListener("change", () => {
+				hueCurveSettings.curveRate = hueCurveRate.value;
+			});
+
 			// Function to apply a preset curve
 			function applyPresetCurve(presetName) {
 				const preset = presetCurves[presetName];
@@ -1235,7 +1484,7 @@
 					slider.value = value;
 					const valueElement = document.getElementById(`${slider.id}-value`);
 					if (valueElement) {
-						valueElement.textContent = `${value}%`;
+						valueElement.value = value;
 					}
 				});
 
@@ -1274,20 +1523,12 @@
 			});
 
 			// Generation mode toggle handlers
-			generationModeDefault.addEventListener("change", () => {
-				if (generationModeDefault.checked) {
-					isAdvancedMode = false;
-					advancedModeControls.style.display = "none";
-					flavorControls.style.display = "block";
-				}
-			});
-
-			generationModeAdvanced.addEventListener("change", () => {
-				if (generationModeAdvanced.checked) {
-					isAdvancedMode = true;
-					advancedModeControls.style.display = "block";
-					flavorControls.style.display = "none";
-
+			advancedModeToggle.addEventListener("change", () => {
+				isAdvancedMode = advancedModeToggle.checked;
+				advancedModeControls.style.display = isAdvancedMode ? "block" : "none";
+				flavorControls.style.display = isAdvancedMode ? "none" : "block";
+				infoSection.style.display = isAdvancedMode ? "none" : "block";
+				if (isAdvancedMode) {
 					// Initialize the curve preview when advanced mode is enabled
 					setTimeout(initCurvePreview, 10); // Small delay to ensure DOM is updated
 				}
@@ -1515,6 +1756,7 @@
 								chromaCurveSettings: isAdvancedMode
 									? {
 											customStops: chromaCurveSettings.customStops,
+											hueCurveSettings: hueCurveSettings,
 									  }
 									: null,
 							},

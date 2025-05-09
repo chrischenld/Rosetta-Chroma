@@ -109,7 +109,7 @@ const RAMP_FLAVORS: Record<string, RampFlavor> = {
 };
 
 // This shows the HTML page in "ui.html".
-figma.showUI(__html__, { width: 300, height: 760 });
+figma.showUI(__html__, { width: 300, height: 820 });
 
 // Get color from selection and send to UI
 function sendSelectedColor() {
@@ -272,6 +272,10 @@ interface ChromaCurveSettings {
 	peakPosition: string; // step ID where chroma peaks ("100", "200", etc.)
 	falloffRate: string; // "gentle", "moderate", "steep", "extreme"
 	customStops?: Record<string, number>; // Custom values for individual stops (0-1)
+	hueCurveSettings?: {
+		totalHueCurve: number; // -10 to +10 total hue shift across the ramp
+		curveRate: string; // "early", "linear", "late"
+	};
 }
 
 // Define message type for UI communication
@@ -613,6 +617,44 @@ function generateColorRamp(
 	const seedChroma = oklchSeed.c || 0.1;
 	const seedHue = oklchSeed.h || 0;
 
+	// Generate hue adjustments based on settings if provided
+	const hueAdjustments: number[] = Array(steps.length).fill(0);
+
+	if (chromaCurveSettings?.hueCurveSettings) {
+		const { totalHueCurve, curveRate } = chromaCurveSettings.hueCurveSettings;
+
+		// Skip if no hue curve is set
+		if (totalHueCurve !== 0) {
+			// Calculate the hue adjustments based on the curve rate
+			switch (curveRate) {
+				case "early":
+					// Front-loaded curve (applies more change early in the ramp)
+					steps.forEach((_, index) => {
+						const normalizedPos = index / (steps.length - 1);
+						// Cubic function that changes more rapidly at the beginning
+						hueAdjustments[index] =
+							totalHueCurve * (1 - Math.pow(1 - normalizedPos, 3));
+					});
+					break;
+				case "late":
+					// Back-loaded curve (applies more change later in the ramp)
+					steps.forEach((_, index) => {
+						const normalizedPos = index / (steps.length - 1);
+						// Cubic function that changes more rapidly at the end
+						hueAdjustments[index] = totalHueCurve * Math.pow(normalizedPos, 3);
+					});
+					break;
+				case "linear":
+				default:
+					// Linear distribution of hue change
+					steps.forEach((_, index) => {
+						const normalizedPos = index / (steps.length - 1);
+						hueAdjustments[index] = totalHueCurve * normalizedPos;
+					});
+			}
+		}
+	}
+
 	// White reference for contrast
 	const WHITE: RGBColor = { r: 1, g: 1, b: 1 };
 	const ramp: Record<string, RGBColor> = {};
@@ -634,7 +676,14 @@ function generateColorRamp(
 
 		// Apply hue shift if available
 		let targetH = seedHue;
-		if (selectedFlavor.hueShift) {
+
+		// Apply custom hue adjustment from the curve if available
+		if (hueAdjustments[index] !== 0) {
+			targetH = (seedHue + hueAdjustments[index]) % 360;
+			if (targetH < 0) targetH += 360; // Handle negative values
+		}
+		// Or apply flavor's static hue shift if defined
+		else if (selectedFlavor.hueShift) {
 			targetH = (seedHue + selectedFlavor.hueShift) % 360;
 			if (targetH < 0) targetH += 360; // Handle negative values
 		}
@@ -844,7 +893,12 @@ function createColorRampFrames(
 		RAMP_FLAVORS[flavor]?.name || "Color"
 	} Ramp - ${seedColor}`;
 	if (chromaCurveSettings) {
-		frameName = `[Ramp] Custom Curve (${chromaCurveSettings.peakPosition}) - ${seedColor}`;
+		frameName = `[Ramp] Custom Curve - ${seedColor}`;
+
+		// Add hue curve info if set
+		if (chromaCurveSettings.hueCurveSettings?.totalHueCurve !== 0) {
+			frameName = `[Ramp] Custom Curve (Hue ${chromaCurveSettings.hueCurveSettings?.totalHueCurve}) - ${seedColor}`;
+		}
 	}
 
 	parentFrame.name = frameName;

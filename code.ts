@@ -5,6 +5,7 @@ interface RGBColor {
 	r: number;
 	g: number;
 	b: number;
+	lch?: OklchColor; // Add optional lch property
 }
 
 // Define a type for nodes that can have paint style IDs
@@ -109,7 +110,7 @@ const RAMP_FLAVORS: Record<string, RampFlavor> = {
 };
 
 // This shows the HTML page in "ui.html".
-figma.showUI(__html__, { width: 300, height: 820 });
+figma.showUI(__html__, { width: 600, height: 720 });
 
 // Get color from selection and send to UI
 function sendSelectedColor() {
@@ -292,6 +293,12 @@ interface UiMessage {
 	isAdvancedMode?: boolean;
 	customContrastTargets?: Record<string, number>;
 	chromaCurveSettings?: ChromaCurveSettings;
+}
+
+interface OklchColor {
+	l: number;
+	c: number;
+	h: number;
 }
 
 // Create color styles from a ramp
@@ -1668,6 +1675,46 @@ figma.ui.onmessage = async (msg: UiMessage) => {
 			curves: presetCurves,
 		});
 		return;
+	} else if (msg.type === "preview-ramp") {
+		// Generate a color ramp for preview without creating frames
+		try {
+			const colorRamp = generateColorRamp(
+				msg.color || "#000000",
+				msg.flavor || "bright",
+				msg.isAdvancedMode ? msg.customContrastTargets : undefined,
+				msg.isAdvancedMode ? msg.chromaCurveSettings : undefined
+			);
+
+			// Calculate contrast values for each color and store LCH values
+			const whiteRGB: RGBColor = { r: 1, g: 1, b: 1 };
+			const contrastValues: Record<string, number> = {};
+			const lchValues: Record<string, OklchColor> = {};
+
+			for (const [step, color] of Object.entries(colorRamp)) {
+				contrastValues[step] = contrast(color, whiteRGB);
+
+				// Add LCH values for each color in the ramp
+				const oklchColor = rgbToOklch(color);
+				lchValues[step] = {
+					l: oklchColor.l,
+					c: oklchColor.c,
+					h: oklchColor.h,
+				};
+
+				// Add lch values to the color object itself for easier access in UI
+				(color as RGBColor).lch = oklchColor;
+			}
+
+			// Send the colors back to the UI
+			figma.ui.postMessage({
+				type: "preview-ramp-colors",
+				colors: colorRamp,
+				contrastValues: contrastValues,
+				lchValues: lchValues,
+			});
+		} catch (error) {
+			console.error("Preview ramp generation error:", error);
+		}
 	} else if (msg.type === "close") {
 		figma.closePlugin();
 	}

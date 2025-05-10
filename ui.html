@@ -16,13 +16,11 @@
 				font-size: 0.75rem;
 				background-color: #fff;
 				line-height: 1.5;
+				width: 600px; /* Doubled width to make room for sidebar */
 			}
 			.container {
 				display: flex;
-				flex-direction: column;
-				gap: 12px;
-				padding-bottom: 16px;
-				margin-bottom: 16px;
+				flex-direction: row; /* Changed from column to row */
 				height: 100%;
 			}
 
@@ -88,6 +86,13 @@
 				width: 64px;
 				text-align: right;
 			}
+
+			.flavor-selector {
+				display: flex;
+				flex-direction: column;
+				gap: 4px;
+			}
+
 			.flavor-selector select,
 			.input-field[type="select"] {
 				width: 100%;
@@ -145,7 +150,7 @@
 				font-size: 0.65rem;
 				padding: 0;
 				background-color: #fff;
-				height: 32px;
+				height: 24px;
 				color: #999;
 				text-decoration: underline;
 				border: none;
@@ -168,15 +173,31 @@
 				color: #303030;
 			}
 
+			.button-footer {
+				position: static;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				gap: 16px;
+				width: 240px;
+				height: 100%;
+				background-color: #fff;
+				border-left: 1px solid #eee;
+				padding: 12px 0px 0px 8px;
+			}
+
 			#create-ramp-btn {
-				margin-bottom: 16px;
+				width: 100%;
 			}
 
 			.button-group {
 				display: flex;
 				flex-direction: row;
-				padding-top: 8px;
 				gap: 8px;
+			}
+
+			.button-group button {
+				height: 24px;
 			}
 
 			.message {
@@ -239,6 +260,8 @@
 				display: flex;
 				flex-direction: column;
 				height: 100%;
+				overflow-y: auto;
+				flex: 1; /* Take remaining space */
 			}
 			.tabs {
 				display: flex;
@@ -259,12 +282,16 @@
 				border-bottom: 2px solid #000;
 				color: #000;
 			}
+
 			.tab-content {
 				display: none;
 				flex-direction: column;
 				gap: 12px;
+				padding-bottom: 16px; /* Reduced padding since we don't need space for footer */
+				padding-right: 8px; /* Add right padding to separate from sidebar */
 				flex-grow: 1;
 			}
+
 			.tab-content.active {
 				display: flex;
 			}
@@ -289,10 +316,13 @@
 			}
 
 			#advanced-mode-controls {
+				display: flex;
+				flex-direction: column;
 				padding: 0px 0px 0px 12px;
 				border-left: 1px solid #eee;
 				display: none;
 				margin-top: 12px;
+				gap: 16px;
 			}
 
 			.contrast-targets-container {
@@ -317,7 +347,6 @@
 				width: 64px;
 				padding: 0 4px;
 				text-align: right;
-				-moz-appearance: textfield; /* Hide spinners in Firefox */
 			}
 
 			.contrast-input::-webkit-outer-spin-button,
@@ -503,7 +532,6 @@
 				background-color: #f7f7f5;
 				font-size: 0.75rem;
 				text-align: right;
-				-moz-appearance: textfield; /* Hide spinners in Firefox */
 			}
 
 			/* Hide spinners in WebKit browsers */
@@ -518,16 +546,7 @@
 			.hue-controls {
 				display: flex;
 				flex-direction: column;
-				padding-bottom: 12px;
-				margin-bottom: 12px;
-			}
-
-			.hue-controls {
-				display: flex;
-				flex-direction: column;
 				gap: 8px;
-				padding-bottom: 0;
-				margin-bottom: 0;
 			}
 
 			.hue-controls label {
@@ -540,16 +559,179 @@
 				color: #666;
 				margin: 2px 0 0 0;
 			}
+
+			.preview-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 12px;
+			}
+
+			.preview-header h3 {
+				margin: 0;
+			}
+
+			.preview-header-buttons {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+			}
+
+			.preview-header button {
+				margin: 0;
+				padding: 0;
+				height: auto;
+			}
+
+			.preview-toggle-container {
+				display: none; /* Hide the expand button container */
+			}
+
+			.preview-label {
+				font-weight: 500;
+				font-size: 0.75rem;
+				color: #666;
+			}
+
+			.preview-expanded-header {
+				display: flex;
+				margin-bottom: 4px;
+				font-size: 0.65rem;
+				color: #999;
+			}
+
+			.preview-expanded-header-step {
+				width: 40px;
+			}
+
+			.preview-expanded-header-color {
+				flex-grow: 1;
+				text-align: right;
+				padding-right: 8px;
+			}
+
+			.preview-ramp-container {
+				display: flex;
+				height: 32px;
+				width: 100%;
+				border-radius: 2px;
+				overflow: hidden;
+			}
+
+			.preview-swatch {
+				flex: 1;
+				transition: background-color 0.2s ease;
+			}
+
+			.preview-expanded {
+				display: flex; /* Always show the expanded view */
+				flex-direction: column;
+				gap: 8px;
+				margin-bottom: 8px;
+				border-radius: 2px;
+			}
+
+			.preview-expanded-header {
+				display: flex;
+				margin-bottom: 4px;
+				font-size: 0.65rem;
+				color: #999;
+			}
+
+			.preview-expanded-header-step {
+				width: 40px;
+			}
+
+			.preview-expanded-header-color {
+				flex-grow: 1;
+				text-align: right;
+				padding-right: 8px;
+			}
+
+			.expanded-swatch-row {
+				display: flex;
+				align-items: center;
+			}
+
+			.expanded-swatch-label {
+				font-weight: 500;
+				font-size: 0.75rem;
+				width: 40px;
+				text-align: left;
+				color: #666;
+			}
+
+			.expanded-swatch {
+				flex-grow: 1;
+				height: 36px;
+				border-radius: 2px;
+				transition: background-color 0.2s ease;
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				padding-right: 8px;
+				overflow: hidden;
+			}
+
+			.expanded-swatch-info {
+				display: none; /* Hide by default, will be toggled by Reveal button */
+				background-color: rgba(255, 255, 255, 0.7);
+				padding: 2px 4px;
+				border-radius: 2px;
+				font-size: 0.65rem;
+				font-family: monospace;
+				color: #000; /* Default color for light backgrounds */
+				min-width: 130px; /* Ensure enough width for the oklch format */
+				text-align: right;
+			}
+
+			.expanded-swatch[data-step="100"] .expanded-swatch-info,
+			.expanded-swatch[data-step="200"] .expanded-swatch-info {
+				background-color: rgba(0, 0, 0, 0.6);
+				color: #fff; /* Light text for dark backgrounds */
+			}
+
+			.show-info .expanded-swatch-info {
+				display: block; /* Show when parent has show-info class */
+			}
+
+			.expanded-swatch:hover .expanded-swatch-info {
+				background-color: rgba(
+					255,
+					255,
+					255,
+					0.9
+				); /* Increased opacity on hover */
+			}
+
+			.expanded-swatch[data-step="100"]:hover .expanded-swatch-info,
+			.expanded-swatch[data-step="200"]:hover .expanded-swatch-info {
+				background-color: rgba(
+					0,
+					0,
+					0,
+					0.8
+				); /* Darker background on hover for dark swatches */
+			}
+
+			.preview-ramp {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+				overflow-y: auto;
+				flex-grow: 1;
+			}
+
+			.preview-ramp h3 {
+				margin: 0;
+				font-size: 0.75rem;
+				font-weight: 600;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
-			<!-- <div
-				id="message-container"
-				style="display: none; margin-bottom: 8px"
-				class="message"
-			></div> -->
-
 			<div class="tab-container">
 				<!-- Tab navigation -->
 				<div class="tabs">
@@ -664,7 +846,6 @@
 						</div>
 					</div>
 
-					<!-- New section for advanced mode toggle -->
 					<div class="advanced-mode-container">
 						<div class="checkbox-option">
 							<label for="advanced-mode-toggle">Advanced Mode</label>
@@ -678,12 +859,13 @@
 						<!-- Advanced mode controls - initially hidden -->
 						<div id="advanced-mode-controls">
 							<div class="luminance-controls">
-								<h3>WCAG Contrast Targets</h3>
-								<p class="controls-description">
-									Mostly adjusts luminance. Set custom contrast targets for each
-									step of the color ramp
-								</p>
-
+								<div>
+									<h3>Luminance Curve</h3>
+									<p class="controls-description">
+										Set custom WCAG contrast targets for each step of the color
+										each step of the color ramp
+									</p>
+								</div>
 								<div class="contrast-targets-container">
 									<div class="contrast-target-row">
 										<label for="contrast-100">100</label>
@@ -809,243 +991,240 @@
 							</div>
 
 							<div class="chroma-controls">
-								<h3>Chroma Curve</h3>
-								<p class="controls-description">
-									Customize the chroma (saturation) curve shape. Drag sliders to
-									adjust chroma value for each stop.
-								</p>
-
+								<div>
+									<h3>Chroma Curve</h3>
+									<p class="controls-description">
+										Customize the chroma (saturation) curve shape. Drag sliders
+										to adjust chroma value for each stop.
+									</p>
+								</div>
 								<div class="curve-controls">
-									<div>
-										<div class="stops-container">
-											<div class="stop-row">
-												<label for="stop-100">100</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-100"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="6"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-100-value"
-														value="6"
-														min="0"
-														max="100"
-													/>
-												</div>
-											</div>
-											<div class="stop-row">
-												<label for="stop-200">200</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-200"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="40"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-200-value"
-														value="40"
-														min="0"
-														max="100"
-													/>
-												</div>
-											</div>
-											<div class="stop-row">
-												<label for="stop-300">300</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-300"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="75"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-300-value"
-														value="75"
-														min="0"
-														max="100"
-													/>
-												</div>
-											</div>
-											<div class="stop-row">
-												<label for="stop-400">400</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-400"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="100"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-400-value"
-														value="100"
-														min="0"
-														max="100"
-													/>
-												</div>
-											</div>
-											<div class="stop-row">
-												<label for="stop-500">500</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-500"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="90"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-500-value"
-														value="90"
-														min="0"
-														max="100"
-													/>
-												</div>
-											</div>
-											<div class="stop-row">
-												<label for="stop-600">600</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-600"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="75"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-600-value"
-														value="75"
-														min="0"
-														max="100"
-													/>
-												</div>
-											</div>
-											<div class="stop-row">
-												<label for="stop-700">700</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-700"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="60"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-700-value"
-														value="60"
-														min="0"
-														max="100"
-													/>
-												</div>
-											</div>
-											<div class="stop-row">
-												<label for="stop-800">800</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-800"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="40"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-800-value"
-														value="40"
-														min="0"
-														max="100"
-													/>
-												</div>
-											</div>
-											<div class="stop-row">
-												<label for="stop-900">900</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-900"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="25"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-900-value"
-														value="25"
-														min="0"
-														max="100"
-													/>
-												</div>
-											</div>
-											<div class="stop-row">
-												<label for="stop-950">950</label>
-												<div class="slider-container">
-													<input
-														type="range"
-														id="stop-950"
-														class="slider stop-slider"
-														min="0"
-														max="100"
-														value="15"
-													/>
-													<input
-														type="number"
-														class="stop-value"
-														id="stop-950-value"
-														value="15"
-														min="0"
-														max="100"
-													/>
-												</div>
+									<div class="button-group">
+										<button id="reset-stops" class="button-tertiary">
+											Default
+										</button>
+										<button id="reset-stone" class="button-tertiary">
+											Stone
+										</button>
+										<button id="reset-concrete" class="button-tertiary">
+											Concrete
+										</button>
+									</div>
+									<div class="stops-container">
+										<div class="stop-row">
+											<label for="stop-100">100</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-100"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="6"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-100-value"
+													value="6"
+													min="0"
+													max="100"
+												/>
 											</div>
 										</div>
-
-										<div class="button-group">
-											<button id="reset-stops" class="button-tertiary">
-												Default
-											</button>
-											<button id="reset-stone" class="button-tertiary">
-												Stone
-											</button>
-											<button id="reset-concrete" class="button-tertiary">
-												Concrete
-											</button>
+										<div class="stop-row">
+											<label for="stop-200">200</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-200"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="40"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-200-value"
+													value="40"
+													min="0"
+													max="100"
+												/>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-300">300</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-300"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="75"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-300-value"
+													value="75"
+													min="0"
+													max="100"
+												/>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-400">400</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-400"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="100"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-400-value"
+													value="100"
+													min="0"
+													max="100"
+												/>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-500">500</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-500"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="90"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-500-value"
+													value="90"
+													min="0"
+													max="100"
+												/>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-600">600</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-600"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="75"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-600-value"
+													value="75"
+													min="0"
+													max="100"
+												/>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-700">700</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-700"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="60"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-700-value"
+													value="60"
+													min="0"
+													max="100"
+												/>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-800">800</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-800"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="40"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-800-value"
+													value="40"
+													min="0"
+													max="100"
+												/>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-900">900</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-900"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="25"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-900-value"
+													value="25"
+													min="0"
+													max="100"
+												/>
+											</div>
+										</div>
+										<div class="stop-row">
+											<label for="stop-950">950</label>
+											<div class="slider-container">
+												<input
+													type="range"
+													id="stop-950"
+													class="slider stop-slider"
+													min="0"
+													max="100"
+													value="15"
+												/>
+												<input
+													type="number"
+													class="stop-value"
+													id="stop-950-value"
+													value="15"
+													min="0"
+													max="100"
+												/>
+											</div>
 										</div>
 									</div>
 								</div>
 
-								<!-- Add curve preview graph -->
-								<div class="curve-preview">
+								<!-- <div class="curve-preview">
 									<div class="axis-label y-axis-label" style="display: none">
 										Chroma
 									</div>
@@ -1059,12 +1238,12 @@
 									<div class="axis-label x-axis-label" style="display: none">
 										Color Steps
 									</div>
-								</div>
+								</div> -->
 							</div>
 
 							<div class="hue-controls">
 								<div>
-									<h3>Hue Adjustments</h3>
+									<h3>Hue Curve</h3>
 									<p class="controls-description">
 										Customize how hue shifts across the color ramp
 									</p>
@@ -1093,7 +1272,7 @@
 										/>
 									</div>
 									<div class="input-description" style="margin-top: 4px">
-										Adjusts how much the hue changes from steps 100 to 950
+										Hue adjustment across steps 100 to 950
 									</div>
 								</div>
 								<div>
@@ -1108,7 +1287,7 @@
 										<option value="late" selected>Late (Back-loaded)</option>
 									</select>
 									<div class="input-description" style="margin-top: 4px">
-										Determines where in the ramp the hue changes most rapidly
+										Shape of the hue adjustment curve
 									</div>
 								</div>
 							</div>
@@ -1124,18 +1303,13 @@
 						<div id="input-description" class="input-description">
 							Vibrant colors with high saturation, ideal for modern UIs
 						</div>
-					</div>
-
-					<button id="create-ramp-btn" class="button" disabled>
-						Create Color Ramp
-					</button>
-
-					<div class="info-section" id="info-section">
-						<div class="info-title">What is this?</div>
-						<div class="info-content">
-							This generates 10 colors (100-950) with specific contrast ratios
-							against white. Each style produces different chroma (saturation)
-							curves, while maintaining WCAG contrast targets.
+						<div class="info-section" id="info-section">
+							<div class="info-title">What is this?</div>
+							<div class="info-content">
+								This generates 10 colors (100-950) with specific contrast ratios
+								against white. Each style produces different chroma (saturation)
+								curves, while maintaining WCAG contrast targets.
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1202,6 +1376,90 @@
 						</div>
 					</div>
 				</div>
+			</div>
+
+			<!-- Sidebar (former footer) -->
+			<div class="button-footer">
+				<div class="preview-ramp">
+					<div class="preview-header">
+						<h3>Ramp Preview</h3>
+						<div class="preview-header-buttons">
+							<button id="format-toggle" class="button-tertiary">LCH</button>
+							<button id="reveal-toggle" class="button-tertiary">Reveal</button>
+						</div>
+					</div>
+					<div id="preview-expanded" class="preview-expanded">
+						<div class="preview-expanded-header">
+							<div class="preview-expanded-header-step">Step</div>
+							<div class="preview-expanded-header-color">
+								<span id="format-label">Hex • Contrast</span>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">100</div>
+							<div class="expanded-swatch" data-step="100">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">200</div>
+							<div class="expanded-swatch" data-step="200">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">300</div>
+							<div class="expanded-swatch" data-step="300">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">400</div>
+							<div class="expanded-swatch" data-step="400">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">500</div>
+							<div class="expanded-swatch" data-step="500">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">600</div>
+							<div class="expanded-swatch" data-step="600">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">700</div>
+							<div class="expanded-swatch" data-step="700">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">800</div>
+							<div class="expanded-swatch" data-step="800">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">900</div>
+							<div class="expanded-swatch" data-step="900">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+						<div class="expanded-swatch-row">
+							<div class="expanded-swatch-label">950</div>
+							<div class="expanded-swatch" data-step="950">
+								<div class="expanded-swatch-info"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<button id="create-ramp-btn" class="button" disabled>
+					Create Color Ramp
+				</button>
 			</div>
 		</div>
 
@@ -1278,6 +1536,15 @@
 			const hueCurveSlider = document.getElementById("hue-curve-value");
 			const hueCurveDisplay = document.getElementById("hue-curve-display");
 			const hueCurveRate = document.getElementById("hue-curve-rate");
+			const expandedSwatches = document.querySelectorAll(".expanded-swatch");
+			const previewExpanded = document.getElementById("preview-expanded");
+			const revealToggle = document.getElementById("reveal-toggle");
+			const formatToggle = document.getElementById("format-toggle");
+			const formatLabel = document.getElementById("format-label");
+			// Always show expanded preview
+			let isPreviewExpanded = true;
+			let isInfoRevealed = false;
+			let showLCH = false;
 
 			// Canvas context for curve drawing
 			const curveCtx = curveCanvas ? curveCanvas.getContext("2d") : null;
@@ -1371,15 +1638,62 @@
 				}
 			}
 
+			// Function to toggle showing hex/contrast information
+			function toggleInfoReveal() {
+				isInfoRevealed = !isInfoRevealed;
+				revealToggle.textContent = isInfoRevealed ? "Hide" : "Reveal";
+
+				// Toggle the class on the preview container that shows/hides info
+				if (previewExpanded) {
+					if (isInfoRevealed) {
+						previewExpanded.classList.add("show-info");
+					} else {
+						previewExpanded.classList.remove("show-info");
+					}
+				}
+			}
+
+			// Function to toggle between Hex and LCH format
+			function toggleFormat() {
+				showLCH = !showLCH;
+				formatToggle.textContent = showLCH ? "Hex" : "LCH";
+				formatLabel.textContent = showLCH
+					? "OKLCH • Contrast"
+					: "Hex • Contrast";
+
+				// Update the displayed values in all swatches
+				updateSwatchInfoFormat();
+			}
+
+			// Function to update the format of info in all swatches
+			function updateSwatchInfoFormat() {
+				// We'll need to request updated information from the plugin
+				// as we don't store the LCH values for all swatches in the UI
+				if (currentColor) {
+					updatePreviewRamp();
+				}
+			}
+
+			// Add click handler for the format toggle button
+			formatToggle.addEventListener("click", toggleFormat);
+
+			// Add click handler for the reveal toggle button
+			revealToggle.addEventListener("click", toggleInfoReveal);
+
 			// Initialize based on current state
 			setTimeout(() => {
 				// Initialize curve preview if advanced mode is active on load
 				if (advancedModeToggle.checked) {
 					isAdvancedMode = true;
-					advancedModeControls.style.display = "block";
+					advancedModeControls.style.display = "flex";
 					flavorControls.style.display = "none";
 					infoSection.style.display = "none";
 					initCurvePreview();
+				}
+
+				// Initialize preview if there's a current color
+				if (currentColor) {
+					updatePreviewRamp();
 				}
 			}, 100);
 
@@ -1399,6 +1713,7 @@
 					valueElement.value = value;
 					chromaCurveSettings.customStops[step] = value / 100;
 					updateCurvePreview();
+					updatePreviewRamp();
 				});
 			});
 
@@ -1422,17 +1737,20 @@
 
 					// Update preview
 					updateCurvePreview();
+					updatePreviewRamp();
 				});
 			});
 
 			// Reset stops button event listener
 			resetStopsBtn.addEventListener("click", () => {
 				applyPresetCurve("default");
+				updatePreviewRamp();
 			});
 
 			// Stone curve reset button
 			document.getElementById("reset-stone").addEventListener("click", () => {
 				applyPresetCurve("stone");
+				updatePreviewRamp();
 			});
 
 			// Concrete curve reset button
@@ -1440,6 +1758,7 @@
 				.getElementById("reset-concrete")
 				.addEventListener("click", () => {
 					applyPresetCurve("concrete");
+					updatePreviewRamp();
 				});
 
 			// Hue curve value slider listener
@@ -1447,6 +1766,7 @@
 				const value = parseInt(hueCurveSlider.value);
 				hueCurveDisplay.value = value;
 				hueCurveSettings.totalHueCurve = value;
+				updatePreviewRamp();
 			});
 
 			// Hue curve input listener
@@ -1454,19 +1774,21 @@
 				let value = parseInt(hueCurveDisplay.value);
 
 				// Clamp value between min and max
-				if (value < -10) value = -10;
-				if (value > 10) value = 10;
+				if (value < -250) value = -250;
+				if (value > 250) value = 250;
 
 				// Update slider position
 				hueCurveSlider.value = value;
 
 				// Update settings
 				hueCurveSettings.totalHueCurve = value;
+				updatePreviewRamp();
 			});
 
 			// Hue curve rate dropdown listener
 			hueCurveRate.addEventListener("change", () => {
 				hueCurveSettings.curveRate = hueCurveRate.value;
+				updatePreviewRamp();
 			});
 
 			// Function to apply a preset curve
@@ -1522,16 +1844,20 @@
 				});
 			});
 
-			// Generation mode toggle handlers
+			// Generation mode toggle
 			advancedModeToggle.addEventListener("change", () => {
 				isAdvancedMode = advancedModeToggle.checked;
-				advancedModeControls.style.display = isAdvancedMode ? "block" : "none";
+				advancedModeControls.style.display = isAdvancedMode ? "flex" : "none";
 				flavorControls.style.display = isAdvancedMode ? "none" : "block";
 				infoSection.style.display = isAdvancedMode ? "none" : "block";
+
 				if (isAdvancedMode) {
 					// Initialize the curve preview when advanced mode is enabled
 					setTimeout(initCurvePreview, 10); // Small delay to ensure DOM is updated
 				}
+
+				// Update the preview ramp with the new settings
+				updatePreviewRamp();
 			});
 
 			// Contrast input handlers
@@ -1546,6 +1872,9 @@
 
 					// Update custom contrast targets
 					customContrastTargets[step] = parseFloat(input.value);
+
+					// Update the preview
+					updatePreviewRamp();
 				});
 			});
 
@@ -1564,6 +1893,9 @@
 				}
 
 				createRampBtn.disabled = false;
+
+				// Update the preview ramp
+				updatePreviewRamp();
 			}
 
 			// Toggle the ramp frame UI
@@ -1605,6 +1937,9 @@
 					if (messageContainer) {
 						messageContainer.style.display = "none";
 					}
+
+					// Update the preview ramp when color is selected
+					updatePreviewRamp();
 				} else if (msg.type === "preset-curves") {
 					// Store the preset curves received from the plugin
 					presetCurves = msg.curves;
@@ -1738,6 +2073,7 @@
 			flavorSelect.addEventListener("change", () => {
 				selectedFlavor = flavorSelect.value;
 				updateFlavorDescription();
+				updatePreviewRamp();
 			});
 
 			// Button event listeners
@@ -1902,6 +2238,112 @@
 					"*"
 				);
 			});
+
+			// Function to update the preview ramp
+			function updatePreviewRamp() {
+				if (!currentColor) return;
+
+				// Get the current color as RGB
+				let rgbColor;
+				try {
+					rgbColor = hexToRgb(currentColor);
+				} catch (e) {
+					console.error("Invalid color for preview:", e);
+					return;
+				}
+
+				// Create a message to get color ramp from the plugin
+				// We'll use the same settings that would be used when clicking "Create Ramp"
+				const message = {
+					type: "preview-ramp",
+					color: currentColor,
+					flavor: selectedFlavor,
+					isAdvancedMode: isAdvancedMode,
+					customContrastTargets: isAdvancedMode ? customContrastTargets : null,
+					chromaCurveSettings: isAdvancedMode
+						? {
+								customStops: chromaCurveSettings.customStops,
+								hueCurveSettings: hueCurveSettings,
+						  }
+						: null,
+				};
+
+				// Post message to plugin
+				parent.postMessage({ pluginMessage: message }, "*");
+			}
+
+			// Add message handler for preview ramp response
+			window.addEventListener("message", (event) => {
+				const msg = event.data.pluginMessage;
+				if (msg && msg.type === "preview-ramp-colors") {
+					// Update the preview swatches with the colors
+					updatePreviewSwatches(msg.colors, msg.contrastValues);
+				}
+			});
+
+			// Function to update the preview swatches with colors
+			function updatePreviewSwatches(colors, contrastValues) {
+				if (!colors) return;
+
+				// Update expanded preview swatches
+				expandedSwatches.forEach((swatch) => {
+					const step = swatch.getAttribute("data-step");
+					if (colors[step]) {
+						const color = colors[step];
+						const hex = rgbToHex(color.r, color.g, color.b);
+						swatch.style.backgroundColor = hex;
+
+						// Update the info display
+						const infoElement = swatch.querySelector(".expanded-swatch-info");
+						if (infoElement) {
+							const contrastValue =
+								contrastValues && contrastValues[step]
+									? contrastValues[step].toFixed(1)
+									: "";
+
+							// Show either Hex or LCH format based on toggle state
+							if (showLCH && color.lch) {
+								// Format LCH values in CSS oklch() syntax
+								const l = Math.round(color.lch.l * 100);
+								const c = color.lch.c.toFixed(3);
+								const h = Math.round(color.lch.h);
+								infoElement.innerHTML = `oklch(${l}% ${c} ${h}) <span style="opacity: 0.7">${
+									contrastValue ? "• " + contrastValue : ""
+								}</span>`;
+							} else {
+								// Format Hex value
+								infoElement.innerHTML = `${hex.toUpperCase()} <span style="opacity: 0.7">${
+									contrastValue ? "• " + contrastValue : ""
+								}</span>`;
+							}
+						}
+					}
+				});
+			}
+
+			// Convert RGB to hex helper function for preview
+			function rgbToHex(r, g, b) {
+				r = Math.round(r * 255);
+				g = Math.round(g * 255);
+				b = Math.round(b * 255);
+				return (
+					"#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+				);
+			}
+
+			// Convert hex to RGB helper function for preview
+			function hexToRgb(hex) {
+				// Remove # if present
+				hex = hex.replace(/^#/, "");
+
+				// Parse the hex values
+				const bigint = parseInt(hex, 16);
+				const r = ((bigint >> 16) & 255) / 255;
+				const g = ((bigint >> 8) & 255) / 255;
+				const b = (bigint & 255) / 255;
+
+				return { r, g, b };
+			}
 		</script>
 	</body>
 </html>

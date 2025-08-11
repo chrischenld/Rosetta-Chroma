@@ -41,9 +41,41 @@ const RAMP_FLAVORS: Record<string, RampFlavor> = {
 			0.2, // 950
 		],
 	},
+	rock: {
+		name: "Rock",
+		description: "Slightly lower chroma",
+		chromaMultipliers: [
+			0.45, // 100
+			0.65, // 200
+			0.7, // 300
+			0.8, // 400 - Peak chroma
+			0.75, // 500
+			0.5, // 600
+			0.2, // 700
+			0.1, // 800
+			0.05, // 900
+			0.03, // 950
+		],
+	},
+	fragment: {
+		name: "Fragment",
+		description: "Even lower chroma",
+		chromaMultipliers: [
+			0.4, // 100
+			0.5, // 200
+			0.55, // 300
+			0.65, // 400 - Peak chroma
+			0.55, // 500
+			0.4, // 600
+			0.2, // 700
+			0.09, // 800
+			0.05, // 900
+			0.03, // 950
+		],
+	},
 	stone: {
 		name: "Stone",
-		description: "Emulates more muted/lower saturation",
+		description: "Washed out, muted/lower saturation",
 		chromaMultipliers: [
 			0.35, // 100
 			0.4, // 200
@@ -59,7 +91,7 @@ const RAMP_FLAVORS: Record<string, RampFlavor> = {
 	},
 	concrete: {
 		name: "Concrete",
-		description: "An even lower saturation version of Stone",
+		description: "The most muted scale",
 		chromaMultipliers: [
 			0.175, // 100
 			0.2, // 200
@@ -110,7 +142,7 @@ const RAMP_FLAVORS: Record<string, RampFlavor> = {
 };
 
 // This shows the HTML page in "ui.html".
-figma.showUI(__html__, { width: 600, height: 720 });
+figma.showUI(__html__, { width: 600, height: 600 });
 
 // Get color from selection and send to UI
 function sendSelectedColor() {
@@ -1522,6 +1554,10 @@ function convertChromaMultipliersToStops(
 const presetCurves = {
 	default: convertChromaMultipliersToStops(
 		RAMP_FLAVORS.bright.chromaMultipliers
+	),
+	rock: convertChromaMultipliersToStops(RAMP_FLAVORS.rock.chromaMultipliers),
+	fragment: convertChromaMultipliersToStops(
+		RAMP_FLAVORS.fragment.chromaMultipliers
 	),
 	stone: convertChromaMultipliersToStops(RAMP_FLAVORS.stone.chromaMultipliers),
 	concrete: convertChromaMultipliersToStops(

@@ -1003,6 +1003,12 @@
 										<button id="reset-stops" class="button-tertiary">
 											Default
 										</button>
+										<button id="reset-rock" class="button-tertiary">
+											Rock
+										</button>
+										<button id="reset-fragment" class="button-tertiary">
+											Fragment
+										</button>
 										<button id="reset-stone" class="button-tertiary">
 											Stone
 										</button>
@@ -1752,6 +1758,20 @@
 				applyPresetCurve("stone");
 				updatePreviewRamp();
 			});
+
+			// Rock curve reset button
+			document.getElementById("reset-rock").addEventListener("click", () => {
+				applyPresetCurve("rock");
+				updatePreviewRamp();
+			});
+
+			// Fragment curve reset button
+			document
+				.getElementById("reset-fragment")
+				.addEventListener("click", () => {
+					applyPresetCurve("fragment");
+					updatePreviewRamp();
+				});
 
 			// Concrete curve reset button
 			document
